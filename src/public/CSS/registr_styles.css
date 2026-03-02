@@ -1,0 +1,28 @@
+*{
+    box-sizing: border-box;
+    margin:0px;
+    padding:0px;
+}
+
+.wrapper{
+    max-width:500px;
+    margin:auto;
+}
+
+.form_register{
+    border:2px solid #000;
+    margin-top:50%;
+    
+}
+
+.form_register input{
+    padding:10px;
+    margin-top:10px;
+}
+.form_register h1{
+    display:inline;
+}
+
+form{
+    padding:20px;
+}
