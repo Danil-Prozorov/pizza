@@ -1,0 +1,287 @@
+*{
+    padding:0px;
+    margin:0px;
+    box-sizing:border-box;
+}
+
+a{
+    text-decoration:none;
+}
+
+ul{
+    display:flex;
+}
+
+body{
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(180deg, rgba(245, 245, 245, 0) 1.04%, #F5F5F5 100%);
+}
+
+.mySlide{
+    display:none;
+}
+
+.wrapper{
+    max-width:1200px;
+    margin:auto;
+}
+
+.wrapper_head {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:44px;
+}
+
+.wrapper_button{
+    display:flex;
+    align-items:center;
+}
+
+.address_input{
+    width:690px;
+    height:40px;
+    border-radius:2px;
+    border:1px solid lightgrey;
+    font-size: 20px;
+    line-height: 46px;
+    color: #302C34;
+    background-image: url(../img/home.svg);
+    background-repeat: no-repeat;
+    background-position:left 11px center;
+    padding-left:35px;
+}
+
+button{
+    padding: 8px 16px;
+    border-radius:3px;
+    background-color:#fff;
+    border:1px solid lightgrey;
+    font-size:16px;
+    line-height:24px;
+}
+button a {
+    color:#fff;
+}
+button:hover{
+    cursor:pointer;
+}
+
+.button_primary{
+    background-color:#1890FF;
+    color:#fff;
+    border:1px solid #1890FF;
+    margin-right:8px;
+}
+
+.button_icon{
+    margin-right:6px;
+    vertical-align: middle;
+}
+
+.button_text{
+    vertical-align: middle;
+}
+
+.promo ,.promo2 ,.promo3{
+    display:flex;
+    justify-content: space-between;
+    margin-top:40px;
+    box-shadow: 0px 7px 12px rgba(158, 158, 163, 0.1);
+    border-radius:10px;
+    background:#fff1b8 url(../img/28099-1-5d432aae1ecce.jpeg) no-repeat top right -100px / 800px;
+    /* background-position:top right -300px; */
+    max-height: 300px;
+    margin-bottom:40px;
+}
+.promo2{
+    background:#A2F326 url(../img/kebab_PNG33.png) no-repeat  left bottom -25px / 570px;
+}
+.promo3{
+    background:#26F970 url(../img/sushi_PNG9229.png) no-repeat  right bottom 30px / 400px;
+}
+.promo_text{
+    font-size: 20px;
+    line-height: 30px;
+    padding:70px 0px 60px 80px;
+    max-width: 530px;
+}
+
+.promo_text h2{
+    margin-bottom:29px;
+}
+.promo2 .promo_text{
+    text-align:right;
+    padding:70px 0px 60px 80px;
+    margin:0px 0px 0px 600px;
+}
+
+.wrapper_search_line{
+    display:flex;
+    align-items: center;
+    justify-content:space-between;
+    margin-bottom:44px;
+}
+
+.wrapper_search_line{
+    font-size: 23px;
+    line-height: 42px;
+    color: #000000;
+}
+
+.wrapper_search_line input{
+  width:306px;
+  background-image: url(../img/search_icon.svg) ;
+  background-repeat: no-repeat;
+  background-position:left 5px center;
+  border:1px solid lightgrey;
+  border-radius:2px;
+  padding-left:25px;
+  padding-top:2px;
+  font-size:16px;
+  line-height:24px;
+}
+
+.food_cards{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+}
+
+.foodGroup_and_time a{
+    display:flex;
+    justify-content: space-between;
+    color:#000;
+    text-decoration:none;
+}
+
+.foodGroup_and_time p{
+    border:1px solid #262626;
+    background-color:#262626;
+    color:#fff;
+    padding: 1px 5px;
+    border-radius:2px;
+}
+
+.foodGroup_info{
+    display:flex;
+    margin-top:20px;
+    color: #8C8C8C;
+    align-items: center;
+}
+
+.foodGroup_info p{
+    color: #FFC107;
+    margin:0px 28px 0px 7px;
+}
+
+.foodGroup_info img:hover{
+    cursor:pointer;
+}
+
+.food{
+    max-width:384px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom:31px;
+    border-radius: 7px 7px 0px 0px;
+    background-color:#fff;
+}
+.food .prev-food{
+    max-width:384px;
+    max-height: 255px;
+    border-radius: 7px 7px 0px 0px;
+}
+.food:last-child(){
+    margin-right:0px;
+}
+
+.foodGroup{
+    padding:15px 24px 20px 24px;
+}
+
+
+footer{
+    background-color:#fff;
+}
+.footer-content{
+    padding:48px 0px;
+}
+.footer-content{
+    display:flex;
+    align-items: center;
+}
+
+.footer-content a{
+    text-decoration:none;
+    color:#595959;
+    margin-right:15px;
+}
+
+.footer-logo {
+    margin-right:35px;
+}
+.wrapper_sotsite{
+    display:flex;
+    align-items: center;
+    margin-left:500px;
+}
+.wrapper_sotsite img{
+   width:40px;
+   height: 30px;
+}
+
+/* Another styles for pages of website */
+
+.wrapper_pizzaplus{
+    display:flex;
+    align-items:center;
+    vertical-align:middle;
+    margin:43px 0px 44px 0px;
+}
+.wrapper_pizzaplus h1{
+    font-size: 36px;
+}
+.wrapper_pizzaplus p{
+    color: #FFC107;
+    margin:4px 26px 0px 7px;
+}
+.wrapper_pizzaplus span{
+    color: #8C8C8C;
+}
+.wrapper_pizzaplus img:hover{
+    cursor:pointer;
+}
+.wrapper_pizzaplus img{
+    margin:0px 0px 0px 30px;
+}
+.button_icon {
+    border-radius:0px;
+}
+.button_buy{
+    background-color:#1890FF;
+}
+.button_buy span{
+    color:#fff;
+}
+.order_info{
+    padding:24px;
+}
+.order_info h2{
+    font-size: 28px;
+    margin-bottom:10px;
+}
+.order_info p{
+    color: #8C8C8C;
+    font-size: 18px;
+    margin-bottom:24px;
+}
+.order_info button{
+    margin-right:40px;
+}
+.order_info .price{
+    font-size: 20px;
+    font-weight:bold;
+}
+
+
+
