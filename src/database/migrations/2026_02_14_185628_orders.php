@@ -17,8 +17,7 @@ return new class extends Migration
             $table->integer('status');
             $table->integer('products');
             $table->string('address');
-            $table->timestamps('created');
-            $table->timestamps('updated');
+            $table->timestamps();
         });
 
         Schema::create('order_products', function (Blueprint $table){
@@ -30,11 +29,13 @@ return new class extends Migration
            $table->string('short_description')->nullable();
            $table->float('price');
            $table->integer('product_amount')->default(1);
+           $table->timestamps();
         });
 
         Schema::create('order_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('status_name')->unique();
+            $table->timestamps();
         });
     }
 

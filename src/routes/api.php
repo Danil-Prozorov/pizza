@@ -9,6 +9,7 @@ use App\Http\Controllers\MarketControllers\OrderController;
 use App\Http\Controllers\MarketControllers\ProductController;
 use App\Http\Controllers\AdminControllers\AdminProductController;
 use App\Http\Controllers\AdminControllers\AdminUsersController;
+use App\Http\Controllers\AdminControllers\AdminCategoryController;
 
 Route::get('/user', function (Request $request) {
     return "testy";
@@ -28,6 +29,11 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/products/create', [AdminProductController::class, 'create']);
     Route::put('/admin/products/{id}', [AdminProductController::class, 'update']);
     Route::delete('/admin/products/{id}',[AdminProductController::class,'destroy']);
+    Route::post('/admin/categories', [AdminCategoryController::class,'index']);
+    Route::post('/admin/categories/create', [AdminCategoryController::class, 'create']);
+    Route::post('/admin/categories/{id}', [AdminCategoryController::class, 'show']);
+    Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update']);
+    Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy']);
 
 });
 
