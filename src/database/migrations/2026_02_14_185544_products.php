@@ -23,11 +23,13 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->boolean('active')->default(0);
             $table->integer('status')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('product_statuses', function (Blueprint $table){
             $table->id()->primary();
             $table->string('status_name')->unique();
+            $table->timestamps();
         });
     }
 
