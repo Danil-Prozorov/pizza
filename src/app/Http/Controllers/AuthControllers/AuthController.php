@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\AuthControllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+use App\Models\User;
+
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -52,8 +53,8 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token,
-            'expires_in' => auth('api')->factory()->getTTL() * 60,
-        ]);
+            'expires_in' => auth('api')->factory()->getTTL() * 3600,
+        ],200);
     }
 
     public function loginView()
@@ -69,12 +70,14 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         try{
-            JWTAuth::invalidate(JWTAuth::getTocken());
+            JWTAuth::invalidate(JWTAuth::getToken());
         }catch (JWTException $e){
             return response()->json(['error' => 'Failed to logout']);
         }
+
+        return response()->json(['status'=> 'success','message' => 'Successfully logged out']);
     }
-    /* Move below to UserController */
+
     public function getUser()
     {
         try{

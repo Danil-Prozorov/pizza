@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\AdminControllers;
 
+use App\Http\Requests\Admin\AdminCategoryCreateRequest;
+use App\Http\Requests\Admin\AdminCategoryUpdateRequest;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Category;
 
 class AdminCategoryController extends Controller
@@ -16,16 +17,10 @@ class AdminCategoryController extends Controller
         return response()->json($categories);
     }
 
-    public function create(Request $request)
+    public function create(AdminCategoryCreateRequest $request)
     {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'category_description' => 'string|max:255',
-            'alias' => 'required|string|max:255',
-        ]);
-
         try{
-            $category_data = $request->toArray();
+            $category_data = $request->validated();
             Category::create($category_data);
         }catch (\Exception $e){
             return response()->json(['error' => 'Creation of category failed'], 500);
@@ -46,14 +41,13 @@ class AdminCategoryController extends Controller
         }
     }
 
-    public function update($id, Request $request)
+    public function update($id, AdminCategoryUpdateRequest $request)
     {
         try{
-            $category_data = $request->toArray();
+            $category_data = $request->validated();
             $category = Category::whereId($id);
 
             $category->update($category_data);
-
             if(Cache::has('category_'.$id)){
                 Cache::forget('category_'.$id);
             }

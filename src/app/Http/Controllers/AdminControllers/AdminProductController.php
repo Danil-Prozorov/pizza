@@ -2,42 +2,27 @@
 
 namespace App\Http\Controllers\AdminControllers;
 
-use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\AdminProductCreateRequest;
+use App\Http\Requests\Admin\AdminProductUpdateRequest;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Product;
+use Exception;
 
 class AdminProductController extends Controller
 {
     public function index()
     {
-        if(Cache::has('main_products')) {
-            return response()->json(Cache::get('main_products'));
-        }
-
         $products = Product::paginate(15);
-        Cache::put('main_products',$products,30);
 
-        return response()->json($products);
+        return response()->json(['status'=>'success','products' => $products],200);
     }
 
-    public function create(Request $request)
+    public function create(AdminProductCreateRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'image' => 'mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|integer',
-            'description' => 'string|nullable',
-            'recipe' => 'string|nullable',
-            'short_desc' => 'string|nullable|max:255',
-            'category' => 'required|integer',
-            'stock' => 'integer',
-            'active' => 'integer',
-            'status' => 'integer|exists:product_statuses,id',
-        ]);
 
         try{
-            $data = $request->toArray();
+            $data = $request->validated();
 
             if($request->hasFile('image')) {
                 $path = $request->file('image')->store('uploads','public');
@@ -45,7 +30,7 @@ class AdminProductController extends Controller
             }
 
             Product::create($data);
-        }catch (\Exception $e){
+        }catch (Exception $e){
             return response()->json(['error' => $e->getMessage()], 500);
         }
 
@@ -55,7 +40,7 @@ class AdminProductController extends Controller
     public function show($id)
     {
         if(Cache::get('product_'.$id)){
-            return response()->json(Cache::get('product_'.$id));
+            return response()->json(['status' => 'success','product' => Cache::get('product_'.$id)]);
         }
 
         try{
@@ -63,22 +48,27 @@ class AdminProductController extends Controller
 
             Cache::put('product_'.$id,$product,800);
 
-            return response()->json($product);
-        }catch (\Exception $e){
-            return response()->json(['error'=>'Product not found'],404);
+            return response()->json(['status' => 'success','product' => $product]);
+        }catch (Exception $e){
+            return response()->json(['status'=>'error','message'=>'Product not found'],404);
         }
     }
 
-    public function update($id,Request $request)
+    public function update($id,AdminProductUpdateRequest $request)
     {
         try{
-            Product::whereId($id)->update($request->all());
+            $params = $request->validated();
+            $product = Product::whereId($id)->update($params);
+
+            if(!$product){
+                throw new Exception("Product not found");
+            }
 
             if(Cache::get('product_'.$id)){
                 Cache::put('product_'.$id,Product::find($id),800);
             }
-        }catch (\Exception $e){
-            return response()->json(['error'=>'Product not found'],404);
+        }catch (Exception $e){
+            return response()->json(['status'=>'error','message'=>'Product not found'],404);
         }
 
         return response()->json(['status' => 'success', 'message' => 'Product updated'],200);
@@ -87,13 +77,17 @@ class AdminProductController extends Controller
     public function destroy($id)
     {
         try{
-            Product::whereId($id)->delete();
+            $product = Product::whereId($id)->delete();
+
+            if(!$product){
+                throw new Exception("Product not found");
+            }
 
             if(Cache::get('product_'.$id)){
                 Cache::forget('product_'.$id);
             }
-        }catch(\Exception $e){
-            return response()->json(['error' => 'Product not found'],404);
+        }catch(Exception $e){
+            return response()->json(['status'=>'error','message'=> 'Product not found'],404);
         }
 
         return response()->json(['status' => 'success', 'message' => 'Product deleted'],200);

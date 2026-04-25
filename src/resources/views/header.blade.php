@@ -13,12 +13,14 @@
         <a href="{{route('home')}}"><img src="img\logo.svg" alt="logo" class="logo"></a>
         <input type="search" class="input address_input" placeholder="Поиск">
         <div class="wrapper_button">
+            @if(!auth('api')->user())
             <a href="{{route('auth.login')}}">
                 <button class="button_primary">
                     <img src="img\user.svg" class="button_icon">
                     <span class="button_text">Войти</span>
                 </button>
             </a>
+            @endif
             <a href="{{route("cart.index")}}">
                 <button>
                     <img src="img\shopping-cart.svg" class="button_icon">

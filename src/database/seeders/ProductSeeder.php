@@ -17,6 +17,20 @@ class ProductSeeder extends Seeder
     {
         $images = [ 'img/pizza_plus.png','img/italian_pizza.jpg','/img/pizza_cheese.jpg','img/pizza_burger.png' ];
 
+
+        DB::table( 'products' )->insert([
+            'name' => Str::random(10),
+            'image' => $images[rand(0,3)],
+            'price' => rand(100, 500),
+            'description' => Str::random(150),
+            'recipe' => Str::random(50),
+            'short_desc' => Str::random(50),
+            'category' => rand(1,2),
+            'stock' => 57,
+            'active' => rand(0,1),
+            'status' => 1,
+        ]);
+
         $count = 0;
         while( $count != 49 ){
             DB::table( 'products' )->insert([
@@ -29,7 +43,7 @@ class ProductSeeder extends Seeder
                 'category' => rand(1,2),
                 'stock' => rand(1,15),
                 'active' => rand(0,1),
-                'status' => rand(0,3),
+                'status' => rand(1,3),
             ]);
             $count++;
         }
