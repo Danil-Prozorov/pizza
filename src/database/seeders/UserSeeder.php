@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
-    public $limit = 1999;
+    public $limit = 10; // Was a 1999 but for tests changed it for 10
     /**
      * Run the database seeds.
      */
@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
     {
         $count = 0;
 
-        while ($count < $this->limit) {
+         while ($count < $this->limit) {
             DB::table('users')->insert([
                 'username' => Str::random(10),
                 'email' => Str::random(10) . '@gmail.com',
@@ -28,5 +28,12 @@ class UserSeeder extends Seeder
 
             $count++;
         }
+
+        DB::table('users')->insert([
+            'username' => 'test user',
+            'email' => 'tests@gmail.com',
+            'password' => Hash::make('password'),
+            'is_admin' => 1,
+        ]);
     }
 }

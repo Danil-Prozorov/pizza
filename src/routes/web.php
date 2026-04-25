@@ -11,13 +11,12 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
 // Views
 Route::get('/cart',[CartController::class,'index'])->name('cart.index');
 Route::get('/login',[AuthController::class,'loginView'])->name('auth.login');
 Route::get('/register',[AuthController::class,'registerView'])->name('auth.register');
 
-// POST Requests
+// POST Auth Requests
 Route::post('/register', [AuthController::class, 'register'])->name('auth.registerRequest');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.loginRequest');
 

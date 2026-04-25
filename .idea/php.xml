@@ -124,6 +124,10 @@
       <path value="$PROJECT_DIR$/src/vendor/voku/portable-ascii" />
       <path value="$PROJECT_DIR$/src/vendor/mockery/mockery" />
       <path value="$PROJECT_DIR$/src/vendor/dflydev/dot-access-data" />
+      <path value="$PROJECT_DIR$/src/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/src/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/src/vendor/tymon/jwt-auth" />
+      <path value="$PROJECT_DIR$/src/vendor/predis/predis" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">

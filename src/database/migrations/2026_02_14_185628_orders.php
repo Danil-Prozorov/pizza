@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('status');
+            $table->integer('status')->default(1);
             $table->integer('products');
             $table->string('address');
             $table->timestamps();
         });
 
-        Schema::create('order_products', function (Blueprint $table){
+         Schema::create('order_products', function (Blueprint $table){
            $table->id();
            $table->integer('order_id');
            $table->integer('product_id');

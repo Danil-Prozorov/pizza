@@ -120,6 +120,10 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/voku/portable-ascii" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/lcobucci/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/tymon/jwt-auth" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/predis/predis" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -27,7 +27,7 @@ return new class extends Migration
         });
 
         Schema::create('product_statuses', function (Blueprint $table){
-            $table->id()->primary();
+            $table->id();
             $table->string('status_name')->unique();
             $table->timestamps();
         });

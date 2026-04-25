@@ -22,6 +22,8 @@ class AdminMiddleware
                 if($user->is_admin){
                     return $next($request);
                 }
+
+                return response('Unauthorized.', 401);
             }catch (\Exception $e){
                 return response('Unauthorized.', 401);
             }
