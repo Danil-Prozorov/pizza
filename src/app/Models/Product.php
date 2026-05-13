@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Models\Product_statuses;
+use App\Models\ProductStatuses;
 
 class Product extends Model
 {
@@ -12,6 +12,6 @@ class Product extends Model
 
     public function product_status(): HasOne
     {
-        return $this->hasOne(Product_statuses::class, 'id', 'status');
+        return $this->hasOne(ProductStatuses::class, 'id', 'status');
     }
 }

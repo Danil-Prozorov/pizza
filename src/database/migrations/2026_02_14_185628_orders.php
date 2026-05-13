@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-         Schema::create('order_products', function (Blueprint $table){
+         Schema::create('orderProducts', function (Blueprint $table){
            $table->id();
            $table->integer('order_id');
            $table->integer('product_id');
@@ -45,7 +45,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('orders');
-        Schema::dropIfExists('order_products');
+        Schema::dropIfExists('orderProducts');
         Schema::dropIfExists('order_statuses');
     }
 };

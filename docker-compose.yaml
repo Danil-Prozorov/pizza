@@ -4,7 +4,7 @@ services:
   nginx:
     image: "nginx:stable-alpine"
     ports:
-      - "80:80"
+      - "${NGINX_PORT}:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./src:/var/www/laravel
@@ -23,10 +23,10 @@ services:
       - ./xdebug/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
   postgres:
     image: postgres
-    ports:
-      - "5433:5432"
     env_file:
       - env/postgres.env
+    ports:
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - ./db:/var/lib/postgresql
     healthcheck:
@@ -51,12 +51,12 @@ services:
     image: "redis:alpine"
     container_name: redis_container
     ports:
-      - "6379:6379"
+      - "${REDIS_PORT}:6379"
     command: redis-server --appendonly yes
     volumes:
       - /redis
     healthcheck:
-      test: [ "CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 5

@@ -15,7 +15,6 @@ Route::get('/user', function (Request $request) {
 });
 
 Route::middleware('admin')->group(function () {
-
     // Admin routes for Users
     Route::post('/admin/users',[AdminUsersController::class,'index']);
     Route::post('/admin/users/create',[AdminUsersController::class,'create']);
@@ -28,11 +27,6 @@ Route::middleware('admin')->group(function () {
     Route::post('/admin/products/{id}',[AdminProductController::class,'show']);
     Route::put('/admin/products/{id}', [AdminProductController::class, 'update']);
     Route::delete('/admin/products/{id}',[AdminProductController::class,'destroy']);
-    /*Route::post('/admin/categories', [AdminCategoryController::class,'index']);
-    Route::post('/admin/categories/create', [AdminCategoryController::class, 'create']);
-    Route::post('/admin/categories/{id}', [AdminCategoryController::class, 'show']);
-    Route::put('/admin/categories/{id}', [AdminCategoryController::class, 'update']);
-    Route::delete('/admin/categories/{id}', [AdminCategoryController::class, 'destroy']); */
     // Admin routes for Orders
     Route::post('/admin/orders', [AdminOrderController::class,'index']);
     Route::post('/admin/orders/create', [AdminOrderController::class, 'create']);
@@ -41,10 +35,6 @@ Route::middleware('admin')->group(function () {
     Route::put('/admin/orders/{id}', [AdminOrderController::class, 'update']);
     Route::delete('/admin/orders/{id}', [AdminOrderController::class, 'destroy']);
 });
-
-// Category Routes
-/* Route::post('/category/',[CategoryController::class,'index']);
-Route::post('/category/{category}',[CategoryController::class,'show']); */
 
 // Public product routes
 Route::post('/product/{id}',[ProductController::class,'show']);

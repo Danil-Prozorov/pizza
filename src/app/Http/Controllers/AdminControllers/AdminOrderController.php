@@ -2,101 +2,53 @@
 
 namespace App\Http\Controllers\AdminControllers;
 
+use App\Contracts\AdminOrderUpdateProductContract as IAdminOrderUpdateProducts;
 use App\Http\Requests\Admin\AdminOrderUpdateProductsRequest as ProductRequest;
 use App\Http\Requests\Admin\AdminOrderCreateRequest as CreateRequest;
 use App\Http\Requests\Admin\AdminOrderUpdateRequest as UpdateRequest;
-use Illuminate\Support\Facades\Cache;
+use App\Contracts\AdminOrderCreationContract as IAdminOrderCreation;
+use App\Contracts\AdminOrderDestroyContract as IAdminOrderDestroy;
+use App\Contracts\AdminOrderUpdateContract as IAdminOrderUpdate;
+use App\Contracts\AdminOrderIndexContract as IAdminOrderIndex;
+use App\Contracts\AdminOrderShowContract as IAdminOrderShow;
 use App\Http\Controllers\Controller;
-use App\Actions\AdminOrderCreation;
-use Illuminate\Support\Facades\DB;
-use App\Models\Order_products;
-use App\Models\Order;
-
 
 class AdminOrderController extends Controller
 {
 
-    public function index()
+    public function index(IAdminOrderIndex $index)
     {
-        if (Cache::has('admin_order_list')) {
-            return response()->json(['status' => 'success', 'data' => Cache::get('admin_order_list')]);
-        }
-
-        $orders = Order::paginate(15);
-
-        Cache::put('admin_order_list', $orders);
-        return response()->json(['status' => 'success', 'data' => $orders]);
+        return $index->handle();
     }
 
-    public function create(CreateRequest $request)
+    public function create(CreateRequest $request, IAdminOrderCreation $creator)
     {
-        try{
-            $arguments = $request->validated();
+        $arguments = $request->validated();
 
-            (new AdminOrderCreation())->handle($arguments);
-
-        }catch (\Exception $e){
-            return response()->json(['status' => 'error', 'message' => 'Cannot create order.'],404);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Order created successfully.'],200);
+        return $creator->handle($arguments);
     }
 
-    public function show($id)
+    public function show($id,IAdminOrderShow $show)
     {
-        try{
-            $order = Order::findOrFail(['id' => $id]);
-
-            return response()->json(['status' => 'success', 'data' => $order],200);
-        }catch (\Exception $e){
-            return response()->json(['status' => 'error', 'message' => 'Cannot show order.'],404);
-        }
+        return $show->show($id);
     }
 
-    public function update($id, UpdateRequest $request)
+    public function update($id, UpdateRequest $request, IAdminOrderUpdate $order)
     {
-        try {
-            $params = $request->validated();
-            $order  = Order::findOrFail(['id' => $id]);
+        $params = $request->validated();
 
-            DB::transaction(function () use ($order, $params) {
-                $order[0]->update($params);
-            }, attempts: 3);
-
-        }catch (\Exception $e){
-            return response()->json(['status' => 'error', 'message' => 'Cannot update order.'],404);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Order updated successfully.'],200);
+        return $order->update($id, $params);
     }
 
-    public function updateProducts(ProductRequest $request)
+    public function updateProducts(ProductRequest $request, IAdminOrderUpdateProducts $order_products)
     {
-        try {
-            $params = $request->validated();
-            $product = Order_products::where('order_id', $params['order_id'])->where('product_id', $params['product_id'])->get();
+        $params = $request->validated();
 
-            DB::transaction(function () use ($product, $params) {
-                $product[0]->update($params);
-            }, attempts: 3);
-        }catch (\Exception $e){
-            return response()->json(['status' => 'error', 'message' => 'Cannot update products.'],404);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Product updated successfully.'],200);
+        return $order_products->update($params);
     }
 
-    public function destroy($id)
+    public function destroy($id, IAdminOrderDestroy $order)
     {
-        try{
-            DB::transaction(function () use ($id) {
-                Order::findOrFail(['id'=>$id])[0]->delete();
-                Order_products::where(['order_id'=> $id])->delete();
-            },attempts: 3);
-        }catch (\Exception $e){
-            return response()->json(['status' => 'error', 'message' => 'Cannot delete order.'],404);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Order and related products deleted successfully.'],200);
+        return $order->destroy($id);
     }
 }
