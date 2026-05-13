@@ -11,9 +11,9 @@ class Order extends Model
 {
     protected $guarded = [];
 
-    public function ordered_products():HasMany
+    public function orderedProducts():HasMany
     {
-        return $this->hasMany(Order_products::class);
+        return $this->hasMany(OrderProducts::class);
     }
 
     public function user():BelongsTo

@@ -89,7 +89,7 @@ class AdminOrdersControllerTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $user = $this->post('/api/login',['email' => 'tests@gmail.com','password' => 'password']);
-        $response = $this->withHeaders(['Authorization'=>'Bearer '.$user['token']])->post('/api/admin/orders/create',['user_id' => 129,'address' => 'test address','products_id' => [20],'quantity' => [150]]);
+        $response = $this->withHeaders(['Authorization'=>'Bearer '.$user['token']])->post('/api/admin/orders/create',['user_id' => 99999,'address' => 'test address','products_id' => [20],'quantity' => [150]]);
 
         $response
             ->assertStatus(404)
@@ -121,7 +121,7 @@ class AdminOrdersControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
         $user = $this->post('/api/login',['email' => 'tests@gmail.com','password' => 'password']);
-        $this->withHeaders(['Authorization' => 'Bearer '.$user['token']])->post('/api/admin/orders/create',['user_id' => 1,'address' => 'test address','products_id' => [1],'quantity' => [1]]);
+        $this->withHeaders(['Authorization' => 'Bearer '.$user['token']])->post('/api/admin/orders/create',['user_id' => 99999,'address' => 'test address','products_id' => [1],'quantity' => [1]]);
         $response = $this->withHeaders(['Authorization' => 'Bearer '.$user['token']])->post('/api/admin/orders/1');
 
         $response

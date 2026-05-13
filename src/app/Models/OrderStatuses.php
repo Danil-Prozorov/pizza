@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 
-class Order_statuses extends Model
+class OrderStatuses extends Model
 {
+    protected $table = 'order_statuses';
     protected $guarded = [];
 
     public function order():BelongsTo

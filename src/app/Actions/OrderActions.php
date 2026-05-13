@@ -5,14 +5,65 @@ namespace App\Actions;
 use App\Validators\CustomerOrderValidator as OrderValidator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Models\Order_statuses;
-use App\Models\Order_products;
+use App\Contracts\OrderContract;
+use App\Models\OrderStatuses;
+use App\Models\OrderProducts;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Cart;
 use Exception;
 
-class OrderActions
+class OrderActions implements OrderContract
 {
+    private $user;
+
+    public function __construct()
+    {
+        $this->user = auth('api')->user();
+    }
+
+    public function index()
+    {
+        try{
+            $orders         = $this->connectOrderStatuses($this->user->orders);
+            $orderProducts = $this->getOrderProductList($this->user->orders);
+        }catch (Exception $e){
+            return response()->json([['status' => 'error', 'message' => "Cannot display an orders".$e->getMessage()], 500]);
+        }
+
+        return response()->json(['status' => 'success','orders_list' => $orders,'orders_products' => $orderProducts]);
+    }
+
+    public function show($id)
+    {
+        try{
+            return response()->json(['status' => 'success','data' => $this->getOrderAndProducts($id)],200);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error','message' => 'Can not get order №'.$id],404);
+        }
+    }
+
+    public function create($params)
+    {
+        try{
+            $this->createOrder($params);
+        }catch (Exception $e){
+            return response()->json(['status'=>'error','message' => 'Cannot create an order'], 400);
+        }
+
+        return response()->json(['status'=>'success','message'=>'Order created successfully'],200);
+    }
+
+    public function destroy($id)
+    {
+        try{
+            $change = $this->cancelOrder($id);
+            return response()->json(['status'=>'success','message'=>'Order deleted successfully','order_data' => $change],200);
+        }catch (Exception $e){
+            return response()->json(['status' => 'error','message' => $e->getMessage()], 401);
+        }
+    }
+
     public function createOrder($params)
     {
         try {
@@ -32,21 +83,29 @@ class OrderActions
                     'address'         => $params['address'],
                 ]));
 
+                $order_product_list = [];
+
                 foreach ($products['products'] as $product) {
                     if(!(new OrderValidator())->validateAccessibleAmount($product['product']->id,$product['product_amount'])){
                         throw new Exception("Invalid product amount");
                     }
 
-                    Order_products::create($this->prepareItemInfoForStore($order,[
+                    $order_product_list[] = $this->prepareItemInfoForStore($order,[
                         'product_data' => $product['product'],
                         'quantity'     => $product['product_amount']
-                    ]));
-
+                    ]);
+                    // Не нашёл способа без цикла обновить значения товаров. whereIn + update позволяет указать только 1
+                    // параметр для обновления для всех, а не отдельный для каждого :(
                     $current_product = Product::find($product['product']->id);
-                    $current_product->update(['stock' =>$current_product->stock - $product['product_amount']]);
-
-                    (new CartActions())->removeItem($product['product']->id);
+                    $current_product->update(['stock' => $current_product->stock - $product['product_amount']]);
                 }
+
+
+                foreach (array_chunk($order_product_list, 100) as $chunk) {
+                    DB::table('orderProducts')->insert($chunk);
+                }
+
+                DB::table('carts')->whereIn('user_id',[$this->user->id])->delete();
 
             },attempts: 3);
 
@@ -58,12 +117,12 @@ class OrderActions
 
     public function getOrderProductList($orders):array
     {
-        $list = [];
-
+        $ids  = [];
         foreach ($orders as $order) {
-            $list[] = ['order_'.$order->id.'_products' => Order_products::where('order_id',$order->id)->get()->toArray()];
+            $ids[]  = $order->id;
         }
 
+        $list = DB::table('orderProducts')->whereIn('order_id',$ids)->get()->toArray();
         return $list;
     }
 
@@ -71,7 +130,7 @@ class OrderActions
     {
 
         foreach ($orders as $order) {
-            $order->status = Order_statuses::find($order->status)->status_name;
+            $order->status = OrderStatuses::find($order->status)->status_name;
         }
 
         return $orders;
@@ -163,7 +222,7 @@ class OrderActions
         foreach($orders as $order){
             if($order['id'] == $id){
                 $info_list['order_data'] = $order->toArray();
-                $info_list['product_data'] = $order->ordered_products->toArray();
+                $info_list['product_data'] = $order->orderedProducts->toArray();
                 break;
             }
         }

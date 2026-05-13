@@ -32,8 +32,9 @@ class ProductSeeder extends Seeder
         ]);
 
         $count = 0;
+        $products = [];
         while( $count != 49 ){
-            DB::table( 'products' )->insert([
+            $products[] = [
                 'name' => Str::random(10),
                 'image' => $images[rand(0,3)],
                 'price' => rand(100, 500),
@@ -44,20 +45,16 @@ class ProductSeeder extends Seeder
                 'stock' => rand(1,15),
                 'active' => rand(0,1),
                 'status' => rand(1,3),
-            ]);
+            ];
+
             $count++;
         }
 
-        DB::table( 'product_statuses' )->insert([
-            'status_name' => 'active',
-        ]);
+        foreach(array_chunk($products,100) as $chunk){
+            DB::table( 'products' )->insert($chunk);
+        }
 
-        DB::table( 'product_statuses' )->insert([
-            'status_name' => 'inactive',
-        ]);
-
-        DB::table( 'product_statuses' )->insert([
-            'status_name' => 'sold out',
-        ]);
+        $statuses = [['status_name' => 'active'],['status_name' => 'inactive'],['status_name' => 'sold out']];
+        DB::table( 'product_statuses' )->insert($statuses);
     }
 }
